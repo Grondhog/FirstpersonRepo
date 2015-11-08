@@ -11,7 +11,8 @@ public class PlayerMotor : MonoBehaviour {
 	private Vector3 velocity = Vector3.zero;
 	private Vector3 rotation = Vector3.zero;
 	private Vector3 cameraRotation = Vector3.zero;
-	
+	private Vector3 jumpSpeed = Vector3.zero;
+	private Vector3 gravity = new Vector3(0, 1, 0);
 	
 	
 	private Rigidbody rb;
@@ -36,11 +37,29 @@ public class PlayerMotor : MonoBehaviour {
 		cameraRotation = _cameraRotation;
 	}
 	
+	public void ChangeGravity(bool isGravityOn)
+	{
+		rb.useGravity = isGravityOn;
+	}
+	
+	public void ApplyJump(Vector3 _jumpSpeed)
+	{
+		jumpSpeed = _jumpSpeed;
+	}
+		
+	
 	void FixedUpdate()
 	{
 		
 		PerformMovement();
 		PerformRotation();
+		//AddGravity();
+	}
+	
+	private void AddGravity()
+	{
+		rb.AddForce(transform.position + gravity * Time.fixedDeltaTime);
+		
 	}
 	
 	private void PerformRotation()
@@ -50,13 +69,19 @@ public class PlayerMotor : MonoBehaviour {
 		{
 			cam.transform.Rotate(-cameraRotation);
 		}
+		
 	}
 	
 	private void PerformMovement()
 	{
 		if(velocity != Vector3.zero)
 		{
-			rb.MovePosition(transform.position + velocity * Time.fixedDeltaTime);
+			rb.MovePosition((transform.position + velocity * Time.fixedDeltaTime));
+		}
+		if(jumpSpeed != Vector3.zero)
+		{
+			rb.AddForce(jumpSpeed * Time.fixedDeltaTime, ForceMode.Acceleration);
 		}
 	}
+	
 }

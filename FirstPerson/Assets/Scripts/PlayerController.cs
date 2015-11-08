@@ -2,6 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(PlayerMotor))]
+[RequireComponent(typeof(Collider))]
 
 public class PlayerController : MonoBehaviour {
 
@@ -11,11 +12,18 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField]
 	private float mouseSensitivity = 3f;
 	
+	[SerializeField]
+	private float jumpSpeed = 100f;
+	
+	private Collider collider;
+	
 	private PlayerMotor motor;
 	
 	void Start()
 	{
 		motor = GetComponent<PlayerMotor>();
+		collider = GetComponent<Collider>();
+		Physics.gravity = new Vector3(0, -15f, 0);
 	}
 	
 	void Update()
@@ -45,6 +53,25 @@ public class PlayerController : MonoBehaviour {
 		
 		motor.RotateCamera(cameraRotation);
 		
+		Vector3 jumpVector = Vector3.zero;
+		if(Input.GetButton("Jump"))
+		{
+			jumpVector = Vector3.up * jumpSpeed;
+		}
+		
+		motor.ApplyJump(jumpVector);
+		
+		
+		
+	}
+	
+	void OnTriggerEnter(Collider other) {
+		motor.ChangeGravity(false);
+	}
+	
+	void OnTriggerExit(Collider other)
+	{
+		motor.ChangeGravity(true);
 	}
 	
 }
