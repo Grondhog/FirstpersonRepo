@@ -12,18 +12,15 @@ public class PlayerController : MonoBehaviour {
 	[SerializeField]
 	private float mouseSensitivity = 3f;
 	
-	[SerializeField]
-	private float jumpSpeed = 100f;
-	
-	private Collider collider;
-	
 	private PlayerMotor motor;
-	
-	void Start()
+
+    private float jumpSpeed = 100f;
+
+    private Collider collider;
+
+    void Start()
 	{
 		motor = GetComponent<PlayerMotor>();
-		collider = GetComponent<Collider>();
-		Physics.gravity = new Vector3(0, -15f, 0);
 	}
 	
 	void Update()
@@ -52,26 +49,29 @@ public class PlayerController : MonoBehaviour {
 		Vector3 cameraRotation = new Vector3(xRot, 0f, 0f) * mouseSensitivity;
 		
 		motor.RotateCamera(cameraRotation);
-		
-		Vector3 jumpVector = Vector3.zero;
-		if(Input.GetButton("Jump"))
-		{
-			jumpVector = Vector3.up * jumpSpeed;
-		}
-		
-		motor.ApplyJump(jumpVector);
-		
-		
-		
-	}
-	
-	void OnTriggerEnter(Collider other) {
-		motor.ChangeGravity(false);
-	}
-	
-	void OnTriggerExit(Collider other)
-	{
-		motor.ChangeGravity(true);
-	}
-	
+
+        Vector3 jumpVector = Vector3.zero;
+        if (Input.GetButton("Jump"))
+        {
+            jumpVector = Vector3.up * jumpSpeed;
+        }
+        else
+        {
+            jumpVector = Vector3.down * 10f;
+        }
+
+        motor.ApplyJump(jumpVector);
+
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        motor.ChangeGravity(false);
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        motor.ChangeGravity(true);
+    }
+
 }

@@ -11,11 +11,12 @@ public class PlayerMotor : MonoBehaviour {
 	private Vector3 velocity = Vector3.zero;
 	private Vector3 rotation = Vector3.zero;
 	private Vector3 cameraRotation = Vector3.zero;
-	private Vector3 jumpSpeed = Vector3.zero;
-	private Vector3 gravity = new Vector3(0, 1, 0);
-	
-	
-	private Rigidbody rb;
+
+    private Vector3 jumpSpeed = Vector3.zero;
+    private Vector3 gravity = new Vector3(0, -1, 0);
+
+
+    private Rigidbody rb;
 	
 	void Start()
 	{
@@ -36,52 +37,50 @@ public class PlayerMotor : MonoBehaviour {
 	{
 		cameraRotation = _cameraRotation;
 	}
-	
-	public void ChangeGravity(bool isGravityOn)
-	{
-		rb.useGravity = isGravityOn;
-	}
-	
-	public void ApplyJump(Vector3 _jumpSpeed)
-	{
-		jumpSpeed = _jumpSpeed;
-	}
-		
-	
-	void FixedUpdate()
+
+    public void ChangeGravity(bool isGravityOn)
+    {
+        rb.useGravity = isGravityOn;
+    }
+
+    public void ApplyJump(Vector3 _jumpSpeed)
+    {
+        jumpSpeed = _jumpSpeed;
+    }
+
+    void FixedUpdate()
 	{
 		
 		PerformMovement();
 		PerformRotation();
-		//AddGravity();
+        //AddGravity();
 	}
-	
-	private void AddGravity()
-	{
-		rb.AddForce(transform.position + gravity * Time.fixedDeltaTime);
-		
-	}
-	
-	private void PerformRotation()
+
+    private void AddGravity()
+    {
+        rb.AddForce(transform.position + gravity * Time.fixedDeltaTime);
+
+    }
+
+    private void PerformRotation()
 	{
 		rb.MoveRotation(rb.rotation * Quaternion.Euler(rotation));
 		if(cam != null)
 		{
 			cam.transform.Rotate(-cameraRotation);
 		}
-		
 	}
-	
-	private void PerformMovement()
-	{
-		if(velocity != Vector3.zero)
-		{
-			rb.MovePosition((transform.position + velocity * Time.fixedDeltaTime));
-		}
-		if(jumpSpeed != Vector3.zero)
-		{
-			rb.AddForce(jumpSpeed * Time.fixedDeltaTime, ForceMode.Acceleration);
-		}
-	}
-	
+
+    private void PerformMovement()
+    {
+        if (velocity != Vector3.zero)
+        {
+            rb.MovePosition((transform.position + velocity * Time.fixedDeltaTime));
+        }
+        if (jumpSpeed != Vector3.zero)
+        {
+            rb.AddForce(jumpSpeed * Time.fixedDeltaTime, ForceMode.Acceleration);
+            rb.MovePosition(transform.position + velocity * Time.fixedDeltaTime);
+        }
+    }
 }
