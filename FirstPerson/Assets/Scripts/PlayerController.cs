@@ -17,9 +17,7 @@ public class PlayerController : MonoBehaviour {
 
     [SerializeField]
     private float jumpForce = 1000f;
-
-    private float gravitySpeed = 80f;
-
+    
     private ConfigurableJoint joint;
 
     private Collider mCollider;
@@ -101,9 +99,15 @@ public class PlayerController : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Floor")
+        if(other.gameObject.tag.Equals("Floor"))
         {
             onFloor = true;
+            joint.connectedAnchor = new Vector3(0, other.transform.position.y + 1, 0);
+        }
+        if (other.gameObject.tag.Equals("FuelPowerUp"))
+        {
+            Destroy(other.gameObject);
+            manager.fillFuel();
         }
     }
 
@@ -112,6 +116,8 @@ public class PlayerController : MonoBehaviour {
         if(other.gameObject.tag == "Floor")
         {
             onFloor = false;
+            print("Floor");
+            joint.connectedAnchor = new Vector3(0, 1, 0);
         }
     }
 

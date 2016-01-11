@@ -39,6 +39,11 @@ public class GameManager : MonoBehaviour {
     {
         return fuelCount;
     }
+
+    public void  fillFuel()
+    {
+        fuelCount = fuelCountMax;
+    }
 	
 	// Update is called once per frame
 	void Update () {
