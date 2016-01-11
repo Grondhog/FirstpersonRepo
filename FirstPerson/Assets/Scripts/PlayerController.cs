@@ -2,25 +2,44 @@
 using System.Collections;
 
 [RequireComponent(typeof(PlayerMotor))]
+[RequireComponent(typeof(ConfigurableJoint))]
 [RequireComponent(typeof(Collider))]
 
 public class PlayerController : MonoBehaviour {
 
-	[SerializeField]
-	private float speed = 5f;
-	
-	[SerializeField]
-	private float mouseSensitivity = 3f;
-	
-	private PlayerMotor motor;
+    [SerializeField]
+    private float speed = 5f;
 
-    private float jumpSpeed = 100f;
+    [SerializeField]
+    private float mouseSensitivity = 3f;
 
-    private Collider collider;
+    private PlayerMotor motor;
+
+    [SerializeField]
+    private float jumpForce = 1000f;
+
+    private float gravitySpeed = 80f;
+
+    private ConfigurableJoint joint;
+
+    private Collider mCollider;
+    [Header("Joint Settings")]
+    [SerializeField]
+    private JointDriveMode jointMode = JointDriveMode.Position;
+    [SerializeField]
+    private float jointSpring = 20f;
+    [SerializeField]
+    private float jointMaxForce = 40f;
+
+    [SerializeField]
+    private GameManager manager;
 
     void Start()
 	{
 		motor = GetComponent<PlayerMotor>();
+        joint = GetComponent<ConfigurableJoint>();
+
+        SetJointSettings(jointSpring);
 	}
 	
 	void Update()
@@ -46,32 +65,31 @@ public class PlayerController : MonoBehaviour {
 		
 		float xRot = Input.GetAxisRaw("Mouse Y");
 		
-		Vector3 cameraRotation = new Vector3(xRot, 0f, 0f) * mouseSensitivity;
+		float cameraRotationX = xRot * mouseSensitivity;
 		
-		motor.RotateCamera(cameraRotation);
+		motor.RotateCamera(cameraRotationX);
 
-        Vector3 jumpVector = Vector3.zero;
-        if (Input.GetButton("Jump"))
+        Vector3 jumpVec = Vector3.zero;
+        if(Input.GetButton("Jump") && manager.getFuelCount() > 0)
         {
-            jumpVector = Vector3.up * jumpSpeed;
+            jumpVec = Vector3.up * jumpForce;
+            SetJointSettings(0f);
+            manager.decrementFuelCounter();
         }
         else
         {
-            jumpVector = Vector3.down * 10f;
+            SetJointSettings(jointSpring);
         }
 
-        motor.ApplyJump(jumpVector);
-
+        motor.Jump(jumpVec);
     }
 
-    void OnTriggerEnter(Collider other)
+   private void SetJointSettings(float _jointSpring)
     {
-        motor.ChangeGravity(false);
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        motor.ChangeGravity(true);
+        joint.yDrive = new JointDrive {mode = jointMode,
+            positionSpring = _jointSpring,
+            maximumForce = jointMaxForce
+        };
     }
 
 }
