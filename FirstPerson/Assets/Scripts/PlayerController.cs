@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private GameManager manager;
 
+    private bool onFloor;
+
     void Start()
 	{
 		motor = GetComponent<PlayerMotor>();
@@ -81,6 +83,11 @@ public class PlayerController : MonoBehaviour {
             SetJointSettings(jointSpring);
         }
 
+        if(onFloor)
+        {
+            manager.incrementFuelCounter();
+        }
+
         motor.Jump(jumpVec);
     }
 
@@ -90,6 +97,22 @@ public class PlayerController : MonoBehaviour {
             positionSpring = _jointSpring,
             maximumForce = jointMaxForce
         };
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Floor")
+        {
+            onFloor = true;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.tag == "Floor")
+        {
+            onFloor = false;
+        }
     }
 
 }
