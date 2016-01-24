@@ -2,7 +2,6 @@
 using System.Collections;
 
 [RequireComponent(typeof(PlayerMotor))]
-[RequireComponent(typeof(ConfigurableJoint))]
 [RequireComponent(typeof(Collider))]
 
 public class PlayerController : MonoBehaviour {
@@ -18,7 +17,7 @@ public class PlayerController : MonoBehaviour {
     [SerializeField]
     private float jumpForce = 1000f;
     
-    private ConfigurableJoint joint;
+    //private ConfigurableJoint joint;
 
     private Collider mCollider;
     [Header("Joint Settings")]
@@ -33,13 +32,14 @@ public class PlayerController : MonoBehaviour {
     private GameManager manager;
 
     private bool onFloor;
-
+    private float timeLastLeavingFloor;
     void Start()
 	{
 		motor = GetComponent<PlayerMotor>();
-        joint = GetComponent<ConfigurableJoint>();
+        //joint = GetComponent<ConfigurableJoint>();
 
-        SetJointSettings(jointSpring);
+        //SetJointSettings(jointSpring);
+        timeLastLeavingFloor = Time.time;
 	}
 	
 	void Update()
@@ -73,52 +73,53 @@ public class PlayerController : MonoBehaviour {
         if(Input.GetButton("Jump") && manager.getFuelCount() > 0)
         {
             jumpVec = Vector3.up * jumpForce;
-            SetJointSettings(0f);
+            //SetJointSettings(0f);
             manager.decrementFuelCounter();
         }
-        else
-        {
-            SetJointSettings(jointSpring);
-        }
+
 
         if(onFloor)
         {
             manager.incrementFuelCounter();
         }
+       
 
         motor.Jump(jumpVec);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+    	if(other.gameObject.tag.Equals("Floor"))
+    	{
+    		onFloor = true;
+    	}
+    	if(other.gameObject.tag.Equals("PowerUp"))
+    	{
+    		Destroy(other.gameObject);
+    		manager.fillFuel();
+    	}
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+    	if(other.gameObject.tag.Equals("Floor"))
+    	{
+    		onFloor = false;
+    	}
+    }
+
    private void SetJointSettings(float _jointSpring)
     {
-        joint.yDrive = new JointDrive {mode = jointMode,
+        /*joint.yDrive = new JointDrive {mode = jointMode,
             positionSpring = _jointSpring,
             maximumForce = jointMaxForce
-        };
+        };*/
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.tag.Equals("Floor"))
-        {
-            onFloor = true;
-            joint.connectedAnchor = new Vector3(0, other.transform.position.y + 1, 0);
-        }
-        if (other.gameObject.tag.Equals("FuelPowerUp"))
-        {
-            Destroy(other.gameObject);
-            manager.fillFuel();
-        }
-    }
 
-    void OnTriggerExit(Collider other)
-    {
-        if(other.gameObject.tag == "Floor")
-        {
-            onFloor = false;
-            print("Floor");
-            joint.connectedAnchor = new Vector3(0, 1, 0);
-        }
-    }
+
+   
+
+    
 
 }
