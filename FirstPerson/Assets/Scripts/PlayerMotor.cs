@@ -18,6 +18,8 @@ public class PlayerMotor : MonoBehaviour {
     private float cameraRotationLimit = 85f;
 
     private Rigidbody rb;
+
+    private bool onWall;
 	
 	void Start()
 	{
@@ -44,6 +46,11 @@ public class PlayerMotor : MonoBehaviour {
 		cameraRotationX = _cameraRotation;
 	}
 
+	public void SetOnWall(bool _onWall)
+	{
+		onWall = _onWall;
+	}
+
 
     void FixedUpdate()
 	{
@@ -65,11 +72,16 @@ public class PlayerMotor : MonoBehaviour {
 		}
 	}
 
+
+
     private void PerformMovement()
     {
-        if (velocity != Vector3.zero)
+    	print("Velocity: " + velocity + ", jump: " + jump); 
+        if (velocity != Vector3.zero)// && !onWall)
         {
             rb.MovePosition((transform.position + velocity * Time.fixedDeltaTime));
+            //print(velocity );//* Time.fixedDeltaTime);
+            //rb.AddForce(velocity );
         }
         if(jump != Vector3.zero)
         {

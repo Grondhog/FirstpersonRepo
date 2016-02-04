@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour {
     private GameManager manager;
 
     private bool onFloor;
+    private bool onWall = false;
     private float timeLastLeavingFloor;
     void Start()
 	{
@@ -89,14 +90,21 @@ public class PlayerController : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
+    //print("OnTriggerEnter");
     	if(other.gameObject.tag.Equals("Floor"))
     	{
     		onFloor = true;
     	}
-    	if(other.gameObject.tag.Equals("PowerUp"))
+    	if(other.gameObject.tag.Equals("FuelPowerUp"))
     	{
     		Destroy(other.gameObject);
+    		print("powerUp");
     		manager.fillFuel();
+    	}
+    	if(other.gameObject.tag.Equals("Wall"))
+    	{
+    		onWall = true;
+    		motor.SetOnWall(onWall);
     	}
     }
 
@@ -106,7 +114,14 @@ public class PlayerController : MonoBehaviour {
     	{
     		onFloor = false;
     	}
+    	if(other.gameObject.tag.Equals("Wall"))
+    	{
+    		onWall = false;
+    		motor.SetOnWall(onWall);
+    	}
     }
+
+
 
    private void SetJointSettings(float _jointSpring)
     {

@@ -47,6 +47,11 @@ public class GameManager : MonoBehaviour {
     {
         fuelCount = fuelCountMax;
     }
+
+    public void UpgradeFuelLimit(int amount)
+    {
+    	fuelCountMax += amount;
+    }
 	
 	// Update is called once per frame
 	void Update () {
