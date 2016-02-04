@@ -20,10 +20,13 @@ public class PlayerMotor : MonoBehaviour {
     private Rigidbody rb;
 
     private bool onWall;
+
+	UnityStandardAssets.Utility.LerpControlledBob bobber;
 	
 	void Start()
 	{
 		rb = GetComponent<Rigidbody>();
+		bobber = GetComponent<UnityStandardAssets.Utility.LerpControlledBob>();
 	}
 	
 	public void Move(Vector3 _velocity)
@@ -45,12 +48,6 @@ public class PlayerMotor : MonoBehaviour {
 	{
 		cameraRotationX = _cameraRotation;
 	}
-
-	public void SetOnWall(bool _onWall)
-	{
-		onWall = _onWall;
-	}
-
 
     void FixedUpdate()
 	{
@@ -76,10 +73,20 @@ public class PlayerMotor : MonoBehaviour {
 
     private void PerformMovement()
     {
-    	print("Velocity: " + velocity + ", jump: " + jump); 
+    	//print("Velocity: " + velocity + ", jump: " + jump); 
         if (velocity != Vector3.zero)// && !onWall)
         {
+			//bobber.DoBobCycle();
+			//velocity.y += bobber.Offset();
+			RaycastHit hit;
+			if(rb.SweepTest(velocity, out hit, velocity.magnitude * Time.fixedDeltaTime))
+			{
+				print("Velocity: " + velocity + ", jump: " + jump); 
+				velocity = Vector3.zero;
+			}
+
             rb.MovePosition((transform.position + velocity * Time.fixedDeltaTime));
+
             //print(velocity );//* Time.fixedDeltaTime);
             //rb.AddForce(velocity );
         }

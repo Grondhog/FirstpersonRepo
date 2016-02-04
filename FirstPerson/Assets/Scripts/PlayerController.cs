@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour {
     	if(other.gameObject.tag.Equals("Wall"))
     	{
     		onWall = true;
-    		motor.SetOnWall(onWall);
+    		//motor.SetOnWall(onWall);
     	}
     }
 
@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour {
     	if(other.gameObject.tag.Equals("Wall"))
     	{
     		onWall = false;
-    		motor.SetOnWall(onWall);
+    		//motor.SetOnWall(onWall);
     	}
     }
 
