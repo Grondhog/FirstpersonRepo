@@ -82,6 +82,7 @@ GameObject:
   - 54: {fileID: 5475822}
   - 114: {fileID: 11417668}
   - 114: {fileID: 11488556}
+  - 114: {fileID: 11471140}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -154,7 +155,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 186784}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: 2.99, z: 0}
+  m_LocalPosition: {x: 13.17, y: 2.94, z: -0.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 421758}
@@ -411,6 +412,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cam: {fileID: 2004668}
   cameraRotationLimit: 85
+--- !u!114 &11471140
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 186784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1bbfafbde15c854681023b9e01e12dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BobDuration: 5
+  BobAmount: 5
 --- !u!114 &11488556
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -424,7 +438,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 6.47
   mouseSensitivity: 4.84
-  jumpForce: 1500
+  jumpForce: 2500
   jointMode: 1
   jointSpring: 20
   jointMaxForce: 40
@@ -442,7 +456,7 @@ SphereCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 186784}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b8bb70261dc73ed44b398f7fd4f1c3f4, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2

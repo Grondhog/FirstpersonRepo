@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(PlayerMotor))]
 [RequireComponent(typeof(Collider))]
@@ -101,10 +102,10 @@ public class PlayerController : MonoBehaviour {
     		print("powerUp");
     		manager.fillFuel();
     	}
-    	if(other.gameObject.tag.Equals("Wall"))
+    	if(other.gameObject.tag.Equals("Exit"))
     	{
-    		onWall = true;
-    		//motor.SetOnWall(onWall);
+    		//TODO add change level functionality
+    		SceneManager.LoadScene("Level01");
     	}
     }
 
@@ -113,11 +114,6 @@ public class PlayerController : MonoBehaviour {
     	if(other.gameObject.tag.Equals("Floor"))
     	{
     		onFloor = false;
-    	}
-    	if(other.gameObject.tag.Equals("Wall"))
-    	{
-    		onWall = false;
-    		//motor.SetOnWall(onWall);
     	}
     }
 

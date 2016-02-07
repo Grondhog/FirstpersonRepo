@@ -81,8 +81,12 @@ public class PlayerMotor : MonoBehaviour {
 			RaycastHit hit;
 			if(rb.SweepTest(velocity, out hit, velocity.magnitude * Time.fixedDeltaTime))
 			{
-				print("Velocity: " + velocity + ", jump: " + jump); 
-				velocity = Vector3.zero;
+				if(!hit.collider.tag.Equals("Exit"))
+				{
+					//print("Velocity: " + velocity + ", jump: " + jump); 
+					velocity = Vector3.zero;
+				}
+
 			}
 
             rb.MovePosition((transform.position + velocity * Time.fixedDeltaTime));
